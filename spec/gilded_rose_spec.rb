@@ -15,7 +15,7 @@ describe GildedRose do
         item = Item.new("foo", 0, 0)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 7, 2)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.name).to eq "foo"
       end
 
@@ -23,7 +23,7 @@ describe GildedRose do
         item =Item.new("foo", 7, 10)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 0, -2)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 9
       end
 
@@ -32,7 +32,7 @@ describe GildedRose do
         item = Item.new("foo", 0, 10)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 0, -2)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 8
       end
 
@@ -40,7 +40,7 @@ describe GildedRose do
         item =Item.new("foo", 0, 0)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 0, -2)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 0
       end
 
@@ -48,7 +48,7 @@ describe GildedRose do
         item =Item.new("foo", 0, 1)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 0, -2)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 0
       end
 
@@ -56,7 +56,7 @@ describe GildedRose do
         item = Item.new("foo", 10, 10)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 0, -2)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.sell_in).to eq 9
       end
   end
@@ -69,7 +69,7 @@ describe GildedRose do
         item = Item.new("Aged Brie", 6, 10)
         @gilded_rose.add_item(item, 1)
         @gilded_rose.add_rule(item, 0, 1)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 11
       end
 
@@ -77,7 +77,7 @@ describe GildedRose do
         item = Item.new("Aged Brie", 6, 50)
         @gilded_rose.add_item(item, 1)
         @gilded_rose.add_rule(item, 0, 1)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 50
       end
 
@@ -85,7 +85,7 @@ describe GildedRose do
         item = Item.new("Aged Brie", 6, 49)
         @gilded_rose.add_item(item, 2)
         @gilded_rose.add_rule(item, 0, 1)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 50
       end
     end
@@ -100,7 +100,7 @@ describe GildedRose do
         item = Item.new("Sulfuras, Hand of Ragnaros", 6, 10)
         @gilded_rose.add_item(item, 0)
         @gilded_rose.add_rule(item, 0, 0)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 10
       end
     end
@@ -114,7 +114,7 @@ describe GildedRose do
         item = Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 10)
         @gilded_rose.add_item(item, 1)
         @gilded_rose.add_rule(item, 10, 2)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 12
       end
       it "Increases in quality by 3 when at 5 days or less" do
@@ -122,7 +122,7 @@ describe GildedRose do
         @gilded_rose.add_item(item, 1)
         @gilded_rose.add_rule(item, 10, 2)
         @gilded_rose.add_rule(item, 5, 3)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 13
       end
       it "Reduces in quality to 0 after the concert date" do
@@ -131,7 +131,7 @@ describe GildedRose do
         @gilded_rose.add_rule(item, 10, 2)
         @gilded_rose.add_rule(item, 5, 3)
         @gilded_rose.add_rule(item, 0, -100)
-        @gilded_rose.update_quality(item)
+        @gilded_rose.update_quality()
         expect(item.quality).to eq 0
       end
     end

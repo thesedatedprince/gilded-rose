@@ -7,11 +7,13 @@ class GildedRose
     @items = {}
   end
 
-  def update_quality(item)
-    quality_speed_update(item)
-    degrade_rate = quality_calc(item, @items[item.name.to_sym][1])
-    item.quality += degrade_rate
-    item.sell_in -= 1
+  def update_quality()
+    @items.each do |key, item|
+      quality_speed_update(item[0])
+      degrade_rate = quality_calc(item[0], item[1])
+      item[0].quality += degrade_rate
+      item[0].sell_in -= 1
+    end
   end
 
   def add_item(item, quality_change_rate = -1)
