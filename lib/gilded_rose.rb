@@ -1,5 +1,3 @@
-require 'item.rb'
-
 class GildedRose
 
   def initialize()

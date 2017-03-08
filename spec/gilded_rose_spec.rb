@@ -59,6 +59,18 @@ describe GildedRose do
         @gilded_rose.update_quality()
         expect(item.sell_in).to eq 9
       end
+
+      it "can update multiple items at the same time" do
+        item = Item.new("foo", 10, 10)
+        item2 = Item.new("otherfoo", 10, 10)
+        @gilded_rose.add_item(item, -1)
+        @gilded_rose.add_item(item2, -2)
+        @gilded_rose.add_rule(item, 0, -2)
+        @gilded_rose.add_rule(item2, 0, -4)
+        @gilded_rose.update_quality()
+        expect(item.quality).to eq 9
+        expect(item2.quality).to eq 8
+      end
   end
 
     context "Aged Brie" do
