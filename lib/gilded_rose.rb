@@ -9,10 +9,10 @@ class GildedRose
 
   def update_quality()
     @items.each do |key, item|
+      item[0].sell_in -= 1
       quality_speed_update(item[0])
       degrade_rate = quality_calc(item[0], item[1])
       item[0].quality += degrade_rate
-      item[0].sell_in -= 1
     end
   end
 

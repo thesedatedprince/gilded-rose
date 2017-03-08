@@ -29,7 +29,7 @@ describe GildedRose do
 
 
       it "Reduces quality of goods at 2x speed after sell-by date has passed" do
-        item = Item.new("foo", 0, 10)
+        item = Item.new("foo", 1, 10)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 0, -2)
         @gilded_rose.update_quality()
@@ -111,14 +111,14 @@ describe GildedRose do
       end
 
       it "Increases in quality by 2 when at 10 days or less" do
-        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 10)
+        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 11, 10)
         @gilded_rose.add_item(item, 1)
         @gilded_rose.add_rule(item, 10, 2)
         @gilded_rose.update_quality()
         expect(item.quality).to eq 12
       end
       it "Increases in quality by 3 when at 5 days or less" do
-        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 5, 10)
+        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 6, 10)
         @gilded_rose.add_item(item, 1)
         @gilded_rose.add_rule(item, 10, 2)
         @gilded_rose.add_rule(item, 5, 3)
@@ -126,13 +126,33 @@ describe GildedRose do
         expect(item.quality).to eq 13
       end
       it "Reduces in quality to 0 after the concert date" do
-        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 0, 10)
+        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 1, 10)
         @gilded_rose.add_item(item, 1)
         @gilded_rose.add_rule(item, 10, 2)
         @gilded_rose.add_rule(item, 5, 3)
         @gilded_rose.add_rule(item, 0, -100)
         @gilded_rose.update_quality()
         expect(item.quality).to eq 0
+      end
+    end
+
+    context 'conjured items' do
+      before do
+        @gilded_rose = GildedRose.new
+      end
+      it "reduces by 2 when before sell-by date" do
+        item = Item.new("Conjured Item", 10, 10)
+        @gilded_rose.add_item(item, -2)
+        @gilded_rose.add_rule(item, 0, -4)
+        @gilded_rose.update_quality()
+        expect(item.quality).to eq 8
+      end
+      it "reduces by 4 when after sell-by date" do
+        item = Item.new("Conjured Item", 1, 10)
+        @gilded_rose.add_item(item, -2)
+        @gilded_rose.add_rule(item, 0, -4)
+        @gilded_rose.update_quality()
+        expect(item.quality).to eq 6
       end
     end
   end
