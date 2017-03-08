@@ -27,6 +27,8 @@ class GildedRose
 
   private
 
+  RANGE = (0..50)
+
   def change_date? (item)
     item.sell_in == @items[item.name.to_sym][1][0]
   end
@@ -36,6 +38,15 @@ class GildedRose
   end
 
   def quality_calc (item, degrade_rate)
-    item.quality + degrade_rate > 0 ? degrade_rate : -item.quality
+    in_range?(item, degrade_rate) ? degrade_rate : exception_returner(item,degrade_rate)
   end
+
+  def in_range? (item, degrade_rate)
+    RANGE.include? (item.quality + degrade_rate)
+  end
+
+  def exception_returner(item, degrade_rate)
+    (item.quality + degrade_rate) < RANGE.min ? -item.quality : RANGE.max - item.quality
+  end
+
 end

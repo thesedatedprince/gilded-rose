@@ -44,21 +44,43 @@ describe GildedRose do
         expect(item.quality).to eq 0
       end
 
+      it "never allows quality of item to dip below 0 - even if subtracting from a non-zero" do
+        item =Item.new("foo", 0, 1)
+        @gilded_rose.add_item(item)
+        @gilded_rose.add_rule(item, 0, -2)
+        @gilded_rose.update_quality(item)
+        expect(item.quality).to eq 0
+      end
   end
 
-    # context "Aged Brie" do
-    #   it "increases in quality the older it gets" do
-    #     items =[Item.new("Aged Brie", 6, 10)]
-    #     GildedRose.new(items).update_quality()
-    #     expect(items[0].quality).to eq 11
-    #   end
-    #
-    #   it "doesn't allow quality to go above 50" do
-    #     items =[Item.new("Aged Brie", 6, 50)]
-    #     GildedRose.new(items).update_quality()
-    #     expect(items[0].quality).to eq 50
-    #   end
-    # end
+    context "Aged Brie" do
+      before do
+        @gilded_rose = GildedRose.new
+      end
+      it "increases in quality the older it gets" do
+        item = Item.new("Aged Brie", 6, 10)
+        @gilded_rose.add_item(item, 1)
+        @gilded_rose.add_rule(item, 0, 1)
+        @gilded_rose.update_quality(item)
+        expect(item.quality).to eq 11
+      end
+
+      it "doesn't allow quality to go above 50" do
+        item = Item.new("Aged Brie", 6, 50)
+        @gilded_rose.add_item(item, 1)
+        @gilded_rose.add_rule(item, 0, 1)
+        @gilded_rose.update_quality(item)
+        expect(item.quality).to eq 50
+      end
+
+      it "doesn't allow quality to go above 50 - even if adding from less than 50" do
+        item = Item.new("Aged Brie", 6, 49)
+        @gilded_rose.add_item(item, 2)
+        @gilded_rose.add_rule(item, 0, 1)
+        @gilded_rose.update_quality(item)
+        expect(item.quality).to eq 50
+      end
+    end
     #
     # context "Sulfuras, Hand of Ragnaros" do
     #   it "cannot decrease in quality" do
