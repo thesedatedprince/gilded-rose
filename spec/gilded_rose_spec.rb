@@ -81,15 +81,22 @@ describe GildedRose do
         expect(item.quality).to eq 50
       end
     end
-    #
-    # context "Sulfuras, Hand of Ragnaros" do
-    #   it "cannot decrease in quality" do
-    #     items =[Item.new("Sulfuras, Hand of Ragnaros", 6, 10)]
-    #     GildedRose.new(items).update_quality()
-    #     expect(items[0].quality).to eq 10
-    #   end
-    # end
-    #
+
+    context "Sulfuras, Hand of Ragnaros" do
+
+      before do
+        @gilded_rose = GildedRose.new
+      end
+
+      it "cannot decrease in quality" do
+        item = Item.new("Sulfuras, Hand of Ragnaros", 6, 10)
+        @gilded_rose.add_item(item, 0)
+        @gilded_rose.add_rule(item, 0, 0)
+        @gilded_rose.update_quality(item)
+        expect(item.quality).to eq 10
+      end
+    end
+
     # context "Backstage passes" do
     #   it "Increases in quality by 2 when at 10 days or less" do
     #     items =[Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 10)]
