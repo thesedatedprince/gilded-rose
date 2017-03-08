@@ -6,24 +6,31 @@ describe GildedRose do
   describe "#update_quality" do
 
     context "Generic items" do
+
+      before do
+        @gilded_rose = GildedRose.new
+      end
+
       it "does not change the name" do
         items = Item.new("foo", 0, 0)
-        GildedRose.new.update_quality(items)
+        @gilded_rose.rules_generator(items, 1, 10)
+        @gilded_rose.update_quality(items)
         expect(items.name).to eq "foo"
       end
 
       it "reduces quality of goods as they approach sell-by date" do
         items =Item.new("foo", 7, 10)
-        GildedRose.new().update_quality(items)
+        @gilded_rose.rules_generator(items, 1, 10)
+        @gilded_rose.update_quality(items)
         expect(items.quality).to eq 9
       end
 
 
-      it "Reduces quality of goods at 2x speed after sell-by date has passed" do
-        items =[Item.new("foo", 0, 10)]
-        GildedRose.new().update_quality(items)
-        expect(items.quality).to eq 8
-      end
+      # it "Reduces quality of goods at 2x speed after sell-by date has passed" do
+      #   items = Item.new("foo", 0, 10)
+      #   GildedRose.new().update_quality(items)
+      #   expect(items.quality).to eq 8
+      # end
 
       # it "never allows quality of item to dip below 0" do
       #   items =[Item.new("foo", 0, 0)]
