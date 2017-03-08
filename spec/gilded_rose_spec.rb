@@ -22,7 +22,7 @@ describe GildedRose do
       it "reduces quality of goods as they approach sell-by date" do
         item =Item.new("foo", 7, 10)
         @gilded_rose.add_item(item)
-        @gilded_rose.add_rule(item, 0, 2)
+        @gilded_rose.add_rule(item, 0, -2)
         @gilded_rose.update_quality(item)
         expect(item.quality).to eq 9
       end
@@ -50,6 +50,14 @@ describe GildedRose do
         @gilded_rose.add_rule(item, 0, -2)
         @gilded_rose.update_quality(item)
         expect(item.quality).to eq 0
+      end
+
+      it "should reduce the sell_in date by 1" do
+        item = Item.new("foo", 10, 10)
+        @gilded_rose.add_item(item)
+        @gilded_rose.add_rule(item, 0, -2)
+        @gilded_rose.update_quality(item)
+        expect(item.sell_in).to eq 9
       end
   end
 
@@ -97,23 +105,36 @@ describe GildedRose do
       end
     end
 
-    # context "Backstage passes" do
-    #   it "Increases in quality by 2 when at 10 days or less" do
-    #     items =[Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 10)]
-    #     GildedRose.new(items).update_quality()
-    #     expect(items[0].quality).to eq 12
-    #   end
-    #   it "Increases in quality by 3 when at 5 days or less" do
-    #     items =[Item.new("Backstage passes to a TAFKAL80ETC concert", 5, 10)]
-    #     GildedRose.new(items).update_quality()
-    #     expect(items[0].quality).to eq 13
-    #   end
-    #   it "Reduces in quality to 0 after the concert date" do
-    #     items =[Item.new("Backstage passes to a TAFKAL80ETC concert", 0, 10)]
-    #     GildedRose.new(items).update_quality()
-    #     expect(items[0].quality).to eq 0
-    #   end
-    # end
+    context "Backstage passes" do
+      before do
+        @gilded_rose = GildedRose.new
+      end
+
+      it "Increases in quality by 2 when at 10 days or less" do
+        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 10, 10)
+        @gilded_rose.add_item(item, 1)
+        @gilded_rose.add_rule(item, 10, 2)
+        @gilded_rose.update_quality(item)
+        expect(item.quality).to eq 12
+      end
+      it "Increases in quality by 3 when at 5 days or less" do
+        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 5, 10)
+        @gilded_rose.add_item(item, 1)
+        @gilded_rose.add_rule(item, 10, 2)
+        @gilded_rose.add_rule(item, 5, 3)
+        @gilded_rose.update_quality(item)
+        expect(item.quality).to eq 13
+      end
+      it "Reduces in quality to 0 after the concert date" do
+        item = Item.new("Backstage passes to a TAFKAL80ETC concert", 0, 10)
+        @gilded_rose.add_item(item, 1)
+        @gilded_rose.add_rule(item, 10, 2)
+        @gilded_rose.add_rule(item, 5, 3)
+        @gilded_rose.add_rule(item, 0, -100)
+        @gilded_rose.update_quality(item)
+        expect(item.quality).to eq 0
+      end
+    end
   end
 
   describe "#add_item" do
@@ -124,13 +145,13 @@ describe GildedRose do
         item =Item.new("foo", 7, 10)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 7, 2)
-        expect(@gilded_rose.items).to eq({:foo => [-1, [7,2]]})
+        expect(@gilded_rose.items).to eq({:foo => [-1, [[7,2]]]})
     end
     it 'can instantiate with different quality change speeds' do
         item =Item.new("foo", 7, 10)
         @gilded_rose.add_item(item, 2)
         @gilded_rose.add_rule(item, 0, 3)
-        expect(@gilded_rose.items).to eq({:foo => [2, [0,3]]})
+        expect(@gilded_rose.items).to eq({:foo => [2, [[0,3]]]})
     end
   end
 
@@ -142,14 +163,14 @@ describe GildedRose do
       item =Item.new("foo", 7, 10)
       @gilded_rose.add_item(item)
       @gilded_rose.add_rule(item, 7, 2)
-      expect(@gilded_rose.items).to eq ({:foo => [-1, [7, 2]]})
+      expect(@gilded_rose.items).to eq ({:foo => [-1, [[7, 2]]]})
     end
     it "can take multiple rule sets" do
       item =Item.new("foo", 7, 10)
       @gilded_rose.add_item(item)
       @gilded_rose.add_rule(item, 7, 2)
       @gilded_rose.add_rule(item, 3, 5)
-      expect(@gilded_rose.items).to eq ({:foo => [-1, [7, 2],[3, 5]]})
+      expect(@gilded_rose.items).to eq ({:foo => [-1, [[7, 2],[3, 5]]]})
     end
   end
 
@@ -162,7 +183,7 @@ describe GildedRose do
       @gilded_rose.add_item(item)
       @gilded_rose.add_rule(item, 7, -2)
       @gilded_rose.quality_speed_update(item)
-      expect(@gilded_rose.items).to eq ({:foo => [-2, [7, -2]]})
+      expect(@gilded_rose.items).to eq ({:foo => [-2, [[7, -2]]]})
     end
   end
 end
