@@ -145,17 +145,17 @@ describe GildedRose do
         item =Item.new("foo", 7, 10)
         @gilded_rose.add_item(item)
         @gilded_rose.add_rule(item, 7, 2)
-        expect(@gilded_rose.items).to eq({:foo => [-1, [[7,2]]]})
+        expect(@gilded_rose.items).to eq({:foo => [item, -1, [[7,2]]]})
     end
     it 'can instantiate with different quality change speeds' do
         item =Item.new("foo", 7, 10)
         @gilded_rose.add_item(item, 2)
         @gilded_rose.add_rule(item, 0, 3)
-        expect(@gilded_rose.items).to eq({:foo => [2, [[0,3]]]})
+        expect(@gilded_rose.items).to eq({:foo => [item, 2, [[0,3]]]})
     end
   end
 
-  describe "add_rule" do
+  describe "#add_rule" do
     before do
       @gilded_rose = GildedRose.new
     end
@@ -163,27 +163,14 @@ describe GildedRose do
       item =Item.new("foo", 7, 10)
       @gilded_rose.add_item(item)
       @gilded_rose.add_rule(item, 7, 2)
-      expect(@gilded_rose.items).to eq ({:foo => [-1, [[7, 2]]]})
+      expect(@gilded_rose.items).to eq ({:foo => [item, -1, [[7, 2]]]})
     end
     it "can take multiple rule sets" do
       item =Item.new("foo", 7, 10)
       @gilded_rose.add_item(item)
       @gilded_rose.add_rule(item, 7, 2)
       @gilded_rose.add_rule(item, 3, 5)
-      expect(@gilded_rose.items).to eq ({:foo => [-1, [[7, 2],[3, 5]]]})
-    end
-  end
-
-  describe "quality_speed_update" do
-    before do
-      @gilded_rose = GildedRose.new
-    end
-    it "updates the degrade rate when it hits a specified day" do
-      item =Item.new("foo", 7, 10)
-      @gilded_rose.add_item(item)
-      @gilded_rose.add_rule(item, 7, -2)
-      @gilded_rose.quality_speed_update(item)
-      expect(@gilded_rose.items).to eq ({:foo => [-2, [[7, -2]]]})
+      expect(@gilded_rose.items).to eq ({:foo => [item, -1, [[7, 2],[3, 5]]]})
     end
   end
 end

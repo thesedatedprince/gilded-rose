@@ -9,21 +9,17 @@ class GildedRose
 
   def update_quality(item)
     quality_speed_update(item)
-    degrade_rate = quality_calc(item, @items[item.name.to_sym][0])
+    degrade_rate = quality_calc(item, @items[item.name.to_sym][1])
     item.quality += degrade_rate
     item.sell_in -= 1
   end
 
   def add_item(item, quality_change_rate = -1)
-    @items[item.name.to_sym] =[quality_change_rate, []]
+    @items[item.name.to_sym] =[item, quality_change_rate, []]
   end
 
   def add_rule(item, speed_change_day, new_speed)
-    @items[item.name.to_sym][1].push [speed_change_day, new_speed]
-  end
-
-  def quality_speed_update(item)
-    update_speed(item)
+    @items[item.name.to_sym][2].push [speed_change_day, new_speed]
   end
 
   private
@@ -34,9 +30,9 @@ class GildedRose
       item.sell_in == update[0]
   end
 
-  def update_speed (item)
-    @items[item.name.to_sym][1].each do |update|
-        @items[item.name.to_sym][0] = update[1] if change_date?(item, update)
+  def quality_speed_update (item)
+    @items[item.name.to_sym][2].each do |update|
+        @items[item.name.to_sym][1] = update[1] if change_date?(item, update)
     end
   end
 
