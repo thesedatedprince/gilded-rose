@@ -163,15 +163,13 @@ describe GildedRose do
     end
     it 'adds a new item to the items hash - basic quality speed of 1' do
         item =Item.new("foo", 7, 10)
-        @gilded_rose.add_item(item)
-        @gilded_rose.add_rule(item, 7, 2)
-        expect(@gilded_rose.items).to eq({:foo => [item, -1, [[7,2]]]})
+
+
+        expect(@gilded_rose.add_item(item)).to eq([item, -1, [] ])
     end
     it 'can instantiate with different quality change speeds' do
         item =Item.new("foo", 7, 10)
-        @gilded_rose.add_item(item, 2)
-        @gilded_rose.add_rule(item, 0, 3)
-        expect(@gilded_rose.items).to eq({:foo => [item, 2, [[0,3]]]})
+        expect(@gilded_rose.add_item(item, 2)).to eq([item, 2, []])
     end
   end
 
@@ -182,15 +180,13 @@ describe GildedRose do
     it "associates a rule set to each item" do
       item =Item.new("foo", 7, 10)
       @gilded_rose.add_item(item)
-      @gilded_rose.add_rule(item, 7, 2)
-      expect(@gilded_rose.items).to eq ({:foo => [item, -1, [[7, 2]]]})
+      expect(@gilded_rose.add_rule(item, 7, 2)).to eq ([[7, 2]])
     end
     it "can take multiple rule sets" do
       item =Item.new("foo", 7, 10)
       @gilded_rose.add_item(item)
       @gilded_rose.add_rule(item, 7, 2)
-      @gilded_rose.add_rule(item, 3, 5)
-      expect(@gilded_rose.items).to eq ({:foo => [item, -1, [[7, 2],[3, 5]]]})
+      expect(@gilded_rose.add_rule(item, 3, 5)).to eq ([[7, 2],[3, 5]])
     end
   end
 end

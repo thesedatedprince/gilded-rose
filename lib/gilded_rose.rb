@@ -1,7 +1,6 @@
 require 'item.rb'
 
 class GildedRose
-  attr_reader :items
 
   def initialize()
     @items = {}
